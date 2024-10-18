@@ -1,4 +1,5 @@
 import { AuthManager } from '../data/authmanager.js';
+// handle register page
 document.addEventListener('DOMContentLoaded', () => {
     const registerForm = document.getElementById('registerForm');
     if (registerForm) {

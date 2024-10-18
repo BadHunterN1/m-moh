@@ -4,6 +4,8 @@ import { convMoney } from "../data/money.js";
 import { getCurrencySymbol, updateAllPrices } from "../data/currency.js";
 import { searchBarCon } from "../data/search.js";
 import { AuthManager, initializeAuth } from '../data/authmanager.js';
+// global file for all pages
+// categories array for categories hsec2
 const categories = [
     { summary: "PC", content: ["Steam Wallet Code", "Valorant"], url: `shop.html?search=` },
     { summary: "PSN", content: ["PlayStation", "PlayStation Plus"], url: `shop.html?search=` },
@@ -15,6 +17,7 @@ let htmlHeader = ``;
 let htmlSticky = ``;
 let htmlFooter = ``;
 let htmlEnd = ``;
+// generate headers
 function generateHeader() {
     return htmlHeader = `
 	<a href="#header" class="up"><i class="fa-solid fa-angles-up"></i></a>
@@ -128,6 +131,7 @@ function generateHeader() {
 			</div>
 		</header>`;
 }
+// generate sticky header 
 function generateStickyHeader() {
     return htmlSticky = `
 			<div class="container">
@@ -151,6 +155,7 @@ function generateStickyHeader() {
 			</div>
 		`;
 }
+// generate footer 
 function generateFooter() {
     return htmlFooter = `
 		<div class="container">
@@ -204,12 +209,14 @@ function generateFooter() {
 		</div>
 		`;
 }
+// generate development copyright
 function generateEnd() {
     return htmlEnd = `
 	<a href="#"><strong>IAM LIVE</strong></a> 2022 Created By
 	<strong>BadHunterN1</strong>.
 `;
 }
+// append all headers and footer and end 
 function appendHeader() {
     const header = document.createElement("header");
     header.id = `header-container`;
@@ -228,6 +235,13 @@ function appendHeader() {
     document.body.append(footer);
 }
 appendHeader();
+// make stickyheader sticky
+window.addEventListener("scroll", function () {
+    const stickyHeader = document.querySelector(".sticky-header");
+    stickyHeader.classList.toggle("sticked", window.scrollY > 250);
+    stickyHeader.classList.toggle("unsticked", window.scrollY <= 250);
+});
+// generate categories 
 function generateCategories(categories) {
     const containers = document.querySelectorAll(".hsec2");
     const listContainer = document.querySelector(".categorys ul");
@@ -253,12 +267,7 @@ function generateCategories(categories) {
     });
 }
 generateCategories(categories);
-window.addEventListener("scroll", function () {
-    const stickyHeader = document.querySelector(".sticky-header");
-    stickyHeader.classList.toggle("sticked", window.scrollY > 250);
-    stickyHeader.classList.toggle("unsticked", window.scrollY <= 250);
-});
-// OrderSummray
+// generate aside OrderSummray for all pages
 export function renderOrderSummray() {
     let cartSummHTML = "";
     cart.updateCartQuantity();
@@ -266,7 +275,7 @@ export function renderOrderSummray() {
         cartSummHTML += `
 			<div class="empty-cart">
 				<h5>No products in the cart.</h5>
-				<button><a href="shop.html">Return To Shop</a></button>
+				<button><a href="#">Return To Shop</a></button>
 			</div>
 		`;
     }
@@ -316,6 +325,7 @@ export function renderOrderSummray() {
     }
     document.querySelector(".cart-items").innerHTML =
         cartSummHTML;
+    // make delete button work 
     document.querySelectorAll(".delete").forEach((link) => {
         link.addEventListener("click", () => {
             const productId = link.dataset.productId;
@@ -329,6 +339,7 @@ export function renderOrderSummray() {
             renderOrderSummray();
         });
     });
+    // update product quantity
     document.querySelectorAll(".quantity-input").forEach((link2) => {
         const updateQuantity = () => {
             const productId = link2.dataset.productId;
@@ -357,6 +368,7 @@ export function renderOrderSummray() {
         };
         const prevButton = link2.previousElementSibling;
         const nextButton = link2.nextElementSibling;
+        // addEventListeners
         if (prevButton) {
             prevButton.addEventListener("click", () => {
                 updateQuantity();
@@ -382,6 +394,7 @@ export function renderOrderSummray() {
     updateAllPrices();
 }
 renderOrderSummray();
+// generate aside renderSummray for all pages
 export function renderPaymentSummary() {
     let productPriceCents = 0;
     cart.cartItems.forEach((cartItem) => {
@@ -453,6 +466,7 @@ function toggleActive(open, side) {
 }
 toggleActive(openAside, aside);
 toggleActive(openNav, nav);
+// open seaarchbar for mobile screens
 mSearch.forEach((sIcon) => {
     sIcon.addEventListener("click", () => {
         const searchFocus = document.querySelector("#header-search2");
@@ -460,6 +474,7 @@ mSearch.forEach((sIcon) => {
         searchFocus.focus();
     });
 });
+// manage dropDownButtons for nav
 const dropDownButtons = document.querySelectorAll("nav ul button");
 const subMenus = document.querySelectorAll(".sub-menu");
 dropDownButtons.forEach((button, index) => {
@@ -484,6 +499,7 @@ overlay.addEventListener("click", () => {
             icon.classList.remove("rotate");
     });
 });
+// open detail on hover maybe not the best choice i should replace details
 document.querySelectorAll("details").forEach((details) => {
     const summary = details.querySelector("summary");
     if (summary) {
@@ -491,13 +507,14 @@ document.querySelectorAll("details").forEach((details) => {
         details.addEventListener("mouseleave", () => details.removeAttribute("open"));
     }
 });
+// make searchbar work
 searchBarCon();
+// make taost Notification appear
 let toast = null;
 let progress = null;
 let timer1;
 let timer2;
 export function generateToast() {
-    // Check if toast already exists in the DOM
     if (!toast) {
         const toastHTML = `
 			<div class="toast">
@@ -512,13 +529,10 @@ export function generateToast() {
 				<div class="progress"></div>
 			</div>
 		`;
-        // Insert the toast into the body
         document.body.insertAdjacentHTML('beforeend', toastHTML);
-        // Get the references to the newly created toast and progress elements
         toast = document.querySelector(".toast");
         progress = document.querySelector(".progress");
         const closeIcon = document.querySelector(".close");
-        // Close icon click event
         closeIcon.addEventListener("click", () => {
             toast === null || toast === void 0 ? void 0 : toast.classList.remove("active");
             setTimeout(() => {
@@ -528,10 +542,8 @@ export function generateToast() {
             clearTimeout(timer2);
         });
     }
-    // Show the toast if it exists
     toast.classList.add("active");
     progress === null || progress === void 0 ? void 0 : progress.classList.add("active");
-    // Reset any previous timers and set new ones
     clearTimeout(timer1);
     clearTimeout(timer2);
     timer1 = setTimeout(() => {
@@ -541,6 +553,7 @@ export function generateToast() {
         progress === null || progress === void 0 ? void 0 : progress.classList.remove("active");
     }, 5300);
 }
+// handle register and sign in
 function initializeHeaderWithAuth() {
     const headerContainer = document.getElementById('header-container');
     if (headerContainer) {
@@ -557,16 +570,14 @@ function setupHeaderEventListeners() {
             const authManager = AuthManager.getInstance();
             if (authManager.isLoggedIn()) {
                 if (dropdownMenu1) {
-                    dropdownMenu1.style.display === 'flex' ? 'none' : "flex"; // hide the dropdown
+                    dropdownMenu1.style.display === 'flex' ? 'none' : "flex";
                 }
             }
             else {
-                // Redirect to login/register page
                 window.location.href = 'register.html';
             }
         });
     });
 }
-// Call this function when the DOM is loaded
 document.addEventListener('DOMContentLoaded', initializeHeaderWithAuth);
 //# sourceMappingURL=global.js.map

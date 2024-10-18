@@ -11,6 +11,7 @@ function calculateTotalPrice() {
         return product ? total + (product.priceCents * cartItem.quantity) : total;
     }, 0);
 }
+// generate PaymentSummary for checkout page
 function renderPaymentSummaryCart() {
     const totalPriceCents = calculateTotalPrice();
     document.querySelector(".cart-totals").innerHTML = `

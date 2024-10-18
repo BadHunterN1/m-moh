@@ -4,6 +4,7 @@ import { convMoney } from "../data/money.js";
 import { renderOrderSummray } from "./global.js";
 import { getCurrencySymbol, updateAllPrices, initializeCurrency } from "../data/currency.js";
 initializeCurrency();
+// generate cart table html
 function createCartItemHTML(cartItem, product) {
     if (product) {
         return `
@@ -35,6 +36,7 @@ function createCartItemHTML(cartItem, product) {
         `;
     }
 }
+// insert cart table to tbody
 function renderCartItems() {
     const tbody = document.querySelector("tbody");
     if (cart.cartItems.length === 0) {
@@ -45,7 +47,7 @@ function renderCartItems() {
                         <h1>No products in the cart.</h1>
                         <p>Before proceed to checkout you must add some products to your shopping cart.<br>
                         You will find a lot of interesting products on our "Shop" page.</p>
-                        <button class="in-cart-button"><a href="shop.html">Return To Shop</a></button>
+                        <button class="in-cart-button"><a href="#">Return To Shop</a></button>
                     </div>
                 </td>
             </tr>
@@ -58,6 +60,7 @@ function renderCartItems() {
         }).join('');
     }
 }
+// handle delete button and updateQuantity
 function setupEventListeners() {
     document.querySelectorAll(".delete").forEach(button => {
         button.addEventListener("click", () => {
@@ -103,6 +106,7 @@ function calculateTotalPrice() {
         return product ? total + (product.priceCents * cartItem.quantity) : total;
     }, 0);
 }
+// generate paymentsummary for cart page
 function renderPaymentSummaryCart() {
     const totalPriceCents = calculateTotalPrice();
     document.querySelector(".cart-totals").innerHTML = `

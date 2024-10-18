@@ -4,8 +4,7 @@ import { renderOrderSummray, renderPaymentSummary } from "./global.js";
 import { convMoney } from "../data/money.js";
 import { getCurrencySymbol, updateAllPrices, initializeCurrency } from "../data/currency.js";
 initializeCurrency();
-let swiperInstances = [];
-const productTypes = ['steam', 'playstation'];
+// generate cards to be put inside swiper
 function createProductHTML(product) {
     return `
         <div class="card swiper-slide">
@@ -27,6 +26,7 @@ function createProductHTML(product) {
             </div>
         </div>`;
 }
+// generate swipers according to products types
 function createTypeHTML(type, products) {
     const htmlProducts = products.map(createProductHTML).join('');
     return `
@@ -40,7 +40,9 @@ function createTypeHTML(type, products) {
             </div>
         </div>`;
 }
+// add product types to swipers
 function updateProducts() {
+    const productTypes = ['steam', 'playstation'];
     const htmlContent = productTypes
         .map(type => {
         const specificProducts = products.filter(product => product.type === type);
@@ -56,7 +58,8 @@ function updateProducts() {
     setupQuickView();
     setupAddToCart();
 }
-export function setupQuickView() {
+// handle QuickView button on card
+function setupQuickView() {
     document.querySelectorAll('.view-button').forEach((button) => {
         button.addEventListener('click', () => {
             const productId = button.getAttribute('data-product-id');
@@ -106,6 +109,7 @@ export function setupQuickView() {
             div.classList.add('quick-view');
             div.innerHTML = quickHtml;
             document.body.appendChild(div);
+            // active overlay when QuickView is active 
             const over = document.querySelector('.overlay');
             over.classList.add('active');
             const closeQuickView = () => {
@@ -124,7 +128,8 @@ export function setupQuickView() {
     });
     updateAllPrices();
 }
-export function setupQuickViewAddToCart(quickViewDiv) {
+// handle add to cart for QuickView
+function setupQuickViewAddToCart(quickViewDiv) {
     const addToCartButton = quickViewDiv.querySelector('.add-to-cart-d');
     if (!addToCartButton)
         return;
@@ -152,7 +157,8 @@ export function setupQuickViewAddToCart(quickViewDiv) {
         }, 2000);
     });
 }
-export function setupAddToCart() {
+// handle add to cart for cards
+function setupAddToCart() {
     document.querySelectorAll(".add-to-cart").forEach((button) => {
         button.addEventListener("click", () => {
             const productId = button.getAttribute('data-product-id');
@@ -172,6 +178,7 @@ export function setupAddToCart() {
         });
     });
 }
+// active and setting swipers
 const swiper = new Swiper(".swiper-1", {
     effect: "fade",
     slidesPerView: 1,
@@ -188,10 +195,11 @@ const swiper = new Swiper(".swiper-1", {
 });
 const swiper1 = new Swiper(".swiper-2", {
     slidesPerView: 4,
-    spaceBetween: 40,
+    spaceBetween: 20,
     loop: true,
     breakpoints: {
         1025: {
+            spaceBetween: 40,
             slidesPerView: 8,
         },
     },
@@ -201,6 +209,8 @@ const swiper1 = new Swiper(".swiper-2", {
         prevEl: "#prev2",
     },
 });
+// handle more than one swiper 3
+let swiperInstances = [];
 function initializeSwipers() {
     swiperInstances.forEach(instance => instance.destroy(true, true));
     swiperInstances = [];

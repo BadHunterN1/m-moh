@@ -3,7 +3,9 @@ import { cart } from "../data/cart.js";
 import { renderOrderSummray, renderPaymentSummary } from "./global.js";
 import { getCurrencySymbol, updateAllPrices, initializeCurrency } from "../data/currency.js";
 initializeCurrency();
+// generate productDetails pages for products
 function renderproductDetails() {
+    // generate product url according to product id
     const url = new URL(window.location.href);
     const productId = url.searchParams.get('productId');
     ;
@@ -66,6 +68,7 @@ function renderproductDetails() {
     VP.innerHTML = trackHTML;
     setupQuickViewAddToCart1(VP);
     updateAllPrices();
+    // insert info for product description
     document.querySelector('.product-description .name').textContent = `${matchingproduct.name}`;
     document.querySelector('.product-description .type').textContent = `How to redeem A ${matchingproduct.type} Code?`;
     document.querySelector('.inner-li').innerHTML = `
@@ -80,6 +83,7 @@ function renderproductDetails() {
 						or gift games on ${matchingproduct.type}!
 					</li>`;
 }
+// make add to cart work for productpage
 function setupQuickViewAddToCart1(quickViewDiv) {
     const addToCartButton = quickViewDiv.querySelector('.add-to-cart-d');
     if (!addToCartButton)
