@@ -30,8 +30,7 @@ function renderPaymentSummaryCart() {
         cartQuantity1 += cartItem.quantity;
     });
     document.querySelector('#contact_number').value = `You ordered ${cartQuantity1} items`;
-    document.querySelector('.checkout-btn').addEventListener('click', (event) => {
-        event.preventDefault();
+    document.addEventListener('formSubmitSuccess', (event) => {
         const form = document.getElementById('contact-form');
         if (form.checkValidity()) {
             const authManager = AuthManager.getInstance();
@@ -40,9 +39,8 @@ function renderPaymentSummaryCart() {
                 if (cartItems.length > 0) {
                     const totalCostCents = calculateTotalPrice();
                     addOrder(cartItems, totalCostCents);
-                    resetStorage();
                 }
-                // Redirect to orders page
+                resetStorage();
                 window.location.href = 'orders.html';
             }
             else {
