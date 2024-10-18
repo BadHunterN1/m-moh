@@ -62,7 +62,7 @@ function updateOrderSummary(totalPriceCents, cartQuantity) {
         const productId = cartItem.productId;
         const matchingproduct = getProduct(productId);
         if (matchingproduct) {
-            cartInHTML += `<p> <strong>Product Name:</strong>${matchingproduct.name} <br> <strong>Product Quaintity:</strong> ${cartItem.quantity}, <br> </p>`;
+            cartInHTML += `<p> <strong>Product Name:</strong>${matchingproduct.name} <br> <strong>Product Quantity:</strong> ${cartItem.quantity}, <br> </p>`;
         }
     });
     document.querySelector("#order").value = cartInHTML;
