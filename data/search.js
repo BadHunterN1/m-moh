@@ -1,6 +1,7 @@
 export function searchBarCon(searchPageUrl = 'shop.html') {
     const searchButtons = document.querySelectorAll('.search-button');
     const searchInputs = document.querySelectorAll('.search-bar1');
+
     function performSearch() {
         let searchTerm = '';
         searchInputs.forEach((input) => {
@@ -9,28 +10,35 @@ export function searchBarCon(searchPageUrl = 'shop.html') {
                 return;
             }
         });
+
         if (searchTerm) {
-            const url = new URL(searchPageUrl, window.location.origin);
+            // Use relative URL
+            const url = new URL(searchPageUrl, window.location.href);
             url.searchParams.set('search', searchTerm);
             window.location.href = url.toString();
         }
     }
+
     function handleSearchClick(event) {
         event.preventDefault();
         performSearch();
     }
+
     function handleKeyPress(event) {
         if (event.key === 'Enter') {
             event.preventDefault();
             performSearch();
         }
     }
+
     searchButtons.forEach((button) => {
         button.addEventListener('click', handleSearchClick);
     });
+
     searchInputs.forEach((input) => {
         input.addEventListener('keydown', handleKeyPress);
     });
+
     const urlParams = new URLSearchParams(window.location.search);
     const initialSearchTerm = urlParams.get('search');
     if (initialSearchTerm) {
@@ -39,4 +47,8 @@ export function searchBarCon(searchPageUrl = 'shop.html') {
         });
     }
 }
-//# sourceMappingURL=search.js.map
+
+// Call the function when the DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    searchBarCon();
+});
