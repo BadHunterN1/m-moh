@@ -20,7 +20,7 @@ let htmlEnd = ``;
 // generate headers
 function generateHeader() {
     return htmlHeader = `
-	<a href="#header" class="up"><i class="fa-solid fa-angles-up"></i></a>
+	<a class="up"><i class="fa-solid fa-angles-up"></i></a>
 	<div class="overlay"></div>
 	<header class="header" id="header">
 			<div class="container">
@@ -442,6 +442,12 @@ function initScrollProgress() {
     resizeObserver.observe(document.body);
 }
 initScrollProgress();
+up.addEventListener('click', () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+});
 // Navigation menu functionality
 const nav = document.querySelector("nav");
 const openNav = document.querySelectorAll(".nav-button");
