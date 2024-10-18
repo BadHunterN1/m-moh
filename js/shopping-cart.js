@@ -45,7 +45,7 @@ function renderCartItems() {
                         <h1>No products in the cart.</h1>
                         <p>Before proceed to checkout you must add some products to your shopping cart.<br>
                         You will find a lot of interesting products on our "Shop" page.</p>
-                        <button class="in-cart-button"><a href="#">Return To Shop</a></button>
+                        <button class="in-cart-button"><a href="shop.html">Return To Shop</a></button>
                     </div>
                 </td>
             </tr>
