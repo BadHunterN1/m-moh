@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- Render All Elements Normally -->
+		<link rel="stylesheet" href="css/normalize.css" />
+		<!-- Font Awesome Library -->
+		<link rel="stylesheet" href="css/all.min.css" />
+		<!-- Main Template CSS File -->
+		<link rel="stylesheet" href="css/global.css" />
+		<link rel="stylesheet" href="css/cart.css" />
+		<!-- google Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap"
+			rel="stylesheet" />
+		<style>
+			.form {
+				width: 40%;
+			}
+			@media (max-width: 992px) {
+				.form {
+					width: 90%;
+				}
+			}
+		</style>
+		<title>Register</title>
+	</head>
+	<body>
+		<div class="container form">
+			<form class="login-form" id="registerForm">
+				<h1>Register</h1>
+				<div class="form-input-material">
+					<input
+						type="text"
+						name="username"
+						id="username"
+						placeholder=" "
+						autocomplete="off"
+						class="form-control-material"
+						required />
+					<label for="username">Username</label>
+				</div>
+				<div class="form-input-material">
+					<input
+						type="password"
+						name="password"
+						id="password"
+						placeholder=" "
+						autocomplete="off"
+						class="form-control-material"
+						required />
+					<label for="password">Password</label>
+				</div>
+				<button type="submit" class="checkout-btn">Register</button>
+			</form>
+		</div>
+		<script type="module" src="js/global.js"></script>
+		<script type="module" src="js/register.js"></script>
+	</body>
+</html>

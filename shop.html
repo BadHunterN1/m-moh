@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- Render All Elements Normally -->
+		<link rel="stylesheet" href="css/normalize.css" />
+		<!-- Font Awesome Library -->
+		<link rel="stylesheet" href="css/all.min.css" />
+		<!-- Main Template CSS File -->
+		<link rel="stylesheet" href="css/global.css" />
+		<link rel="stylesheet" href="css/main.css" />
+		<link rel="stylesheet" href="css/cart.css" />
+		<!-- google Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap"
+			rel="stylesheet" />
+		<title>Shop</title>
+	</head>
+	<body>
+		<div class="order-progress">
+			<div class="container">
+				<div>Shop</div>
+			</div>
+		</div>
+		<div class="container js-container">
+			<header>
+				<h1>Product Listing</h1>
+				<select id="sort-select">
+					<option value="latest">Latest</option>
+					<option value="asc">Price: Low to High</option>
+					<option value="desc">Price: High to Low</option>
+				</select>
+			</header>
+			<div class="products products-container"></div>
+			<footer>
+				<div id="pagination"></div>
+			</footer>
+		</div>
+		<script type="module" src="js/global.js"></script>
+		<script type="module" src="js/shop.js"></script>
+	</body>
+</html>

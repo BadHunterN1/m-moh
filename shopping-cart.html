@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- Render All Elements Normally -->
+		<link rel="stylesheet" href="css/normalize.css" />
+		<!-- Font Awesome Library -->
+		<link rel="stylesheet" href="css/all.min.css" />
+		<!-- Main Template CSS File -->
+		<link rel="stylesheet" href="css/global.css" />
+		<link rel="stylesheet" href="css/cart.css" />
+		<!-- google Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap"
+			rel="stylesheet" />
+		<title>Your Cart</title>
+	</head>
+	<body>
+		<div class="order-progress">
+			<div class="container">
+				<p>
+					<span><a href="#">Shopping cart</a></span>
+					<i class="fa-solid fa-arrow-right-long"></i> Checkout
+				</p>
+			</div>
+		</div>
+		<div class="container cart-here">
+			<div class="in-cart-filled">
+				<table>
+					<thead>
+						<tr>
+							<th></th>
+							<th></th>
+							<th>PRODUCT</th>
+							<th>PRICE</th>
+							<th>QUANTITY</th>
+							<th>SUBTOTAL</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+				<div class="cart-totals"></div>
+			</div>
+
+
+		<script type="module" src="js/global.js"></script>
+		<script type="module" src="js/shopping-cart.js"></script>
+	</body>
+</html>
