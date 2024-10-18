@@ -13,20 +13,20 @@ const availableCurrencies = {
     usd: { symbol: "USD$", conversionRate: 1 },
     egp: { symbol: "EGP", conversionRate: 50 }
 };
+let currentCurrency = "usd";
 function updateEGPConversionRate() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const response = yield fetch(`https://api.currencyfreaks.com/latest?apikey=${API_KEY}&symbols=EGP`);
-            if (!response.ok) {
+            if (!response.ok)
                 throw new Error(`HTTP error! status: ${response.status}`);
-            }
             const data = yield response.json();
-            const egpRate = data.rates.EGP;
+            const egpRate = parseFloat(data.rates.EGP);
             if (egpRate) {
-                availableCurrencies.egp.conversionRate = parseFloat(egpRate);
-                console.log('Updated EGP conversion rate:', availableCurrencies.egp.conversionRate);
+                availableCurrencies.egp.conversionRate = egpRate;
+                console.log('Updated EGP conversion rate:', egpRate);
                 if (currentCurrency === "egp") {
-                    setCurrencyValue(availableCurrencies.egp.conversionRate);
+                    setCurrencyValue(egpRate);
                     updateAllPrices();
                 }
             }
@@ -39,37 +39,33 @@ function updateEGPConversionRate() {
         }
     });
 }
-let currentCurrency = "usd";
-let isReady = false;
 export function getCurrencySymbol() {
     return availableCurrencies[currentCurrency].symbol;
 }
+export function getCurrentCurrency() {
+    return currentCurrency;
+}
 export function updatePriceElement(element) {
     const originalPriceUSDCents = parseInt(element.dataset.originalPriceUsdCents || "0");
-    element.textContent = `${convMoney(originalPriceUSDCents)} ${getCurrencySymbol()}`;
+    const convertedPrice = convMoney(originalPriceUSDCents);
+    const priceText = `${convertedPrice} ${getCurrencySymbol()}`;
+    if (element instanceof HTMLInputElement) {
+        element.value = element.id === "Full_Price" ? `Your total price: ${priceText}` : priceText;
+    }
+    else {
+        element.textContent = priceText;
+    }
 }
 export function updateAllPrices() {
     document.querySelectorAll(".price").forEach(updatePriceElement);
-}
-export function initializePrices() {
-    if (isReady)
-        return;
-    document.querySelectorAll(".price").forEach((element) => {
-        var _a;
-        const currentPrice = parseFloat(((_a = element.textContent) === null || _a === void 0 ? void 0 : _a.replace(/[^0-9.]/g, "")) || "0");
-        const originalPriceUSDCents = Math.round(currentPrice * (currentCurrency === "egp" ? 2 : 100));
-        element.dataset.originalPriceUsdCents = originalPriceUSDCents.toString();
-    });
-    isReady = true;
 }
 function changeCurrency(value) {
     return __awaiter(this, void 0, void 0, function* () {
         if (value === "egp" && availableCurrencies.egp.conversionRate === 1) {
             yield updateEGPConversionRate();
         }
-        const rate = availableCurrencies[value];
         currentCurrency = value;
-        setCurrencyValue(rate.conversionRate);
+        setCurrencyValue(availableCurrencies[value].conversionRate);
         localStorage.setItem("currency", value);
         document.querySelectorAll(".currency").forEach((currencyDiv) => {
             const currentImg = currencyDiv.querySelector(".current-img");
@@ -80,6 +76,7 @@ function changeCurrency(value) {
                 currentCurrencyElement.textContent = value.toUpperCase();
         });
         updateAllPrices();
+        document.dispatchEvent(new Event('currencyChanged'));
     });
 }
 export function setupCurrencyDropdowns() {
@@ -110,7 +107,6 @@ export function setupCurrencyDropdowns() {
     });
     const storedCurrency = localStorage.getItem("currency") || "usd";
     changeCurrency(storedCurrency);
-    initializePrices();
 }
 export function initializeCurrency() {
     if (document.readyState === "loading") {
