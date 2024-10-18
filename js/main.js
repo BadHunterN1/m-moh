@@ -187,11 +187,12 @@ const swiper = new Swiper(".swiper-1", {
     },
 });
 const swiper1 = new Swiper(".swiper-2", {
-    slidesPerView: 8,
+    slidesPerView: 4,
+    spaceBetween: 40,
     loop: true,
     breakpoints: {
-        640: {
-            spaceBetween: 40,
+        1025: {
+            slidesPerView: 8,
         },
     },
     speed: 500,
