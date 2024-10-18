@@ -55,6 +55,7 @@ class ProductListing {
     }
     renderProducts(isInitialLoad = false) {
         const productsContainer = document.querySelector('.products.products-container');
+        const noFound = document.querySelector('.no');
         if (!productsContainer)
             return;
         if (!isInitialLoad) {
@@ -65,7 +66,7 @@ class ProductListing {
                 productsContainer.innerHTML = this.displayedProducts.map(this.createProductHTML).join('');
             }
             else {
-                productsContainer.innerHTML = '<p>No products found.</p>';
+                noFound.innerHTML = '<p class="no-found"><i class="fa-solid fa-exclamation"></i> No products were found matching your selection.</p>';
             }
             updateAllPrices();
             setTimeout(() => this.fadeInProducts(productsContainer), 50);
