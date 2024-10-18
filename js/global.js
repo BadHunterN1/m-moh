@@ -275,7 +275,7 @@ export function renderOrderSummray() {
         cartSummHTML += `
 			<div class="empty-cart">
 				<h5>No products in the cart.</h5>
-				<button><a href="#">Return To Shop</a></button>
+				<button><a href="shop.html">Return To Shop</a></button>
 			</div>
 		`;
     }
