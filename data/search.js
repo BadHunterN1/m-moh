@@ -14,7 +14,10 @@ export function searchBarCon(searchPageUrl = 'shop.html') {
             }
         }
         if (searchTerm) {
-            const url = new URL(searchPageUrl, window.location.origin);
+            // Construct the correct URL preserving the current path
+            const currentPath = window.location.pathname;
+            const basePath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
+            const url = new URL(basePath + searchPageUrl, window.location.origin);
             url.searchParams.set('search', encodeURIComponent(searchTerm));
             window.location.href = url.toString();
         }
