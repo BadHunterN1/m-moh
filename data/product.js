@@ -17,22 +17,7 @@ export class Product {
         return convMoney(this.priceCents);
     }
 }
-class steam extends Product {
-    // sizeChartLink;
-    constructor(productDetails) {
-        super(productDetails);
-        // this.sizeChartLink = productDetails.sizeChartLink;
-    }
-}
-class appliances extends Product {
-    // instructionsLink;
-    // warrantyLink;
-    constructor(productDetails) {
-        super(productDetails);
-        // this.instructionsLink = productDetails.instructionsLink;
-        // this.warrantyLink = productDetails.warrantyLink;
-    }
-}
+
 export const products = [
     {
         id: "1",
@@ -94,7 +79,7 @@ export const products = [
         name: "playstation network card $20 ksa",
         description: "playstation network card $20 ksa",
         priceCents: 2000,
-        keywords: ["playstation network card 10 ksa", "playstation", "psn"],
+        keywords: ["playstation network card 20 ksa", "playstation", "psn"],
         type: "playstation",
     },
     {
@@ -132,6 +117,78 @@ export const products = [
         priceCents: 10000,
         keywords: ["playstation network card 100 kw", "playstation", "psn"],
         type: "playstation",
+    },    
+    {
+        id: "12",
+        image: "imgs/20-EUR-Valorant-Points-430x575.png",
+        name: "20 EUR Valorant Points",
+        description: "20 EUR Valorant Points",
+        priceCents: 2144,
+        keywords: ["20 EUR Valorant Points", "Valorant", "points"],
+        type: "valorant",
+    },
+    {
+        id: "13",
+        image: "imgs/25-EUR-Valorant-Points-430x575.png",
+        name: "25 EUR Valorant Points",
+        description: "25 EUR Valorant Points",
+        priceCents: 2680,
+        keywords: ["25 EUR Valorant Points", "Valorant", "points"],
+        type: "valorant",
+    },
+    {
+        id: "14",
+        image: "imgs/50-EUR-Valorant-Points-430x575.png",
+        name: "50 EUR Valorant Points",
+        description: "50 EUR Valorant Points",
+        priceCents: 5350,
+        keywords: ["50 EUR Valorant Points", "Valorant", "points"],
+        type: "valorant",
+    },
+    {
+        id: "15",
+        image: "imgs/100-EUR-Valorant-Points-430x575.png",
+        name: "100 EUR Valorant Points",
+        description: "100 EUR Valorant Points",
+        priceCents: 10700,
+        keywords: ["100 EUR Valorant Points", "Valorant", "points"],
+        type: "valorant",
+    },
+    {
+        id: "16",
+        image: "imgs/pubg-60-430x602.png.avif",
+        name: "PUBG MOBILE 60 UC (GLOBAL)",
+        description: "PUBG MOBILE 60 UC (GLOBAL)",
+        priceCents: 90,
+        keywords: ["PUBG MOBILE 60 UC (GLOBAL)", "PUBG", "MOBILE", "uc"],
+        type: "PUBG MOBILE",
+    },
+    {
+        id: "17",
+        image: "imgs/pubg-325-430x605.png.avif",
+        name: "PUBG MOBILE 325 UC (GLOBAL)",
+        description: "PUBG MOBILE 325 UC (GLOBAL)",
+        priceCents: 450,
+        keywords: ["PUBG MOBILE 325 UC (GLOBAL)", "PUBG", "MOBILE", "uc"],
+        type: "PUBG MOBILE",
+    },
+    {
+        id: "18",
+        image: "imgs/pubg-660-430x602.png.avif",
+        name: "PUBG MOBILE 660 UC (GLOBAL)",
+        description: "PUBG MOBILE 660 UC (GLOBAL)",
+        priceCents: 900,
+        keywords: ["PUBG MOBILE 660 UC (GLOBAL)", "PUBG", "MOBILE", "uc"],
+        type: "PUBG MOBILE",
+    },
+    {
+        id: "19",
+        image: "imgs/pubg-1800-430x603.png.avif",
+        name: "PUBG MOBILE 1800 UC (GLOBAL)",
+        description: "PUBG MOBILE 1800 UC (GLOBAL)",
+        priceCents: 2250,
+        keywords: ["PUBG MOBILE 1800 UC (GLOBAL)", "PUBG", "MOBILE", "uc"],
+        type: "PUBG MOBILE",
     },
 ].map((productDetails) => {
     return new Product(productDetails);
