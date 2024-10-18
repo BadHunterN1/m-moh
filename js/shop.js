@@ -7,9 +7,10 @@ class ProductListing {
     constructor(productsPerPage = 12) {
         this.productsPerPage = productsPerPage;
         this.allProducts = products;
-        this.totalPages = Math.ceil(this.allProducts.length / this.productsPerPage);
+        this.filteredProducts = [];
         this.overlay = this.getOrCreateOverlay();
         this.currentPage = 1;
+        this.totalPages = 1;
         this.displayedProducts = [];
         this.sortOrder = 'latest';
         this.searchTerm = '';
@@ -19,40 +20,38 @@ class ProductListing {
     }
     initializeState() {
         const urlParams = new URLSearchParams(window.location.search);
-        this.currentPage = this.getValidPageNumber(urlParams.get('page'));
         this.sortOrder = urlParams.get('sort') || 'latest';
         this.searchTerm = urlParams.get('search') || '';
+        this.filterAndSortProducts();
+        this.totalPages = Math.ceil(this.filteredProducts.length / this.productsPerPage);
+        this.currentPage = this.getValidPageNumber(urlParams.get('page'));
         this.updateSortSelect();
     }
-    render(isInitialLoad = false) {
-        this.sortProducts();
-        this.updateDisplayedProducts();
-        this.renderProducts(isInitialLoad);
-        this.renderPagination();
-    }
-    sortProducts() {
-        let filteredProducts = this.allProducts;
-        // If there's a search term, filter the products based on name or keywords
-        if (this.searchTerm) {
-            filteredProducts = this.allProducts.filter((product) => {
+    filterAndSortProducts() {
+        this.filteredProducts = this.searchTerm
+            ? this.allProducts.filter((product) => {
                 const searchTermLower = this.searchTerm.toLowerCase();
                 const nameMatches = product.name.toLowerCase().includes(searchTermLower);
                 const keywordsMatch = product.keywords.some((keyword) => keyword.toLowerCase().includes(searchTermLower));
                 return nameMatches || keywordsMatch;
-            });
-        }
+            })
+            : [...this.allProducts];
         const sortFunctions = {
             latest: (a, b) => parseInt(b.id) - parseInt(a.id),
             asc: (a, b) => a.priceCents - b.priceCents,
             desc: (a, b) => b.priceCents - a.priceCents
         };
-        // Sort the filtered products
-        filteredProducts.sort(sortFunctions[this.sortOrder]);
-        this.allProducts = filteredProducts;
+        this.filteredProducts.sort(sortFunctions[this.sortOrder]);
+    }
+    render(isInitialLoad = false) {
+        this.filterAndSortProducts();
+        this.updateDisplayedProducts();
+        this.renderProducts(isInitialLoad);
+        this.renderPagination();
     }
     updateDisplayedProducts() {
         const startIndex = (this.currentPage - 1) * this.productsPerPage;
-        this.displayedProducts = this.allProducts.slice(startIndex, startIndex + this.productsPerPage);
+        this.displayedProducts = this.filteredProducts.slice(startIndex, startIndex + this.productsPerPage);
     }
     renderProducts(isInitialLoad = false) {
         const productsContainer = document.querySelector('.products.products-container');
@@ -62,7 +61,12 @@ class ProductListing {
             this.fadeOutProducts(productsContainer);
         }
         setTimeout(() => {
-            productsContainer.innerHTML = this.displayedProducts.map(this.createProductHTML).join('');
+            if (this.filteredProducts.length > 0) {
+                productsContainer.innerHTML = this.displayedProducts.map(this.createProductHTML).join('');
+            }
+            else {
+                productsContainer.innerHTML = '<p>No products found.</p>';
+            }
             updateAllPrices();
             setTimeout(() => this.fadeInProducts(productsContainer), 50);
         }, isInitialLoad ? 0 : 300);
