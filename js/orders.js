@@ -1,5 +1,5 @@
 import { orders, saveToStorage } from "../data/orders.js";
-import { getProduct } from "../data/product.js";
+import { getProduct, getProductPriceInfo } from "../data/product.js";
 import { cart } from "../data/cart.js";
 import { convMoney } from "../data/money.js";
 import { getCurrencySymbol, initializeCurrency } from "../data/currency.js";
@@ -25,6 +25,7 @@ function renderOrder() {
                     console.error("Product not found");
                     return;
                 }
+                const priceInfo = getProductPriceInfo(matchingProduct);
                 cartPHTML += `
                     <div class="product-image-container">
                         <img src="${matchingProduct.image}">
@@ -32,7 +33,9 @@ function renderOrder() {
                     <div class="product-details">
                         <div class="product-name">${matchingProduct.name}</div>
                         <div class="product-delivery-date">
-                            Price: ${parseInt(matchingProduct.getPrice()) * quantity} ${getCurrencySymbol()}
+                            Price:${priceInfo.hasDiscount ? `<span class="price original-price" data-original-price-usd-cents="${priceInfo.originalPriceCents}">${priceInfo.originalPrice} ${getCurrencySymbol()}</span>
+                            <span class="price current-price" data-original-price-usd-cents="${priceInfo.discountedPriceCents}">${priceInfo.discountedPrice} ${getCurrencySymbol()}</span>`
+                    : `<span class="price current-price" data-original-price-usd-cents="${priceInfo.originalPriceCents}">${priceInfo.originalPrice} ${getCurrencySymbol()}</span>`}
                         </div>
                         <div class="product-quantity">Quantity: ${quantity}</div>
                     </div>
