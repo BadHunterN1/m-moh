@@ -1,3 +1,12 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import { getProduct } from "../data/product.js";
 import { cart, resetStorage } from "../data/cart.js";
 import { convMoney } from "../data/money.js";
@@ -100,6 +109,7 @@ function handleFormSubmit(event) {
         if (cart.cartItems.length > 0) {
             const totalCostCents = calculateTotalPrice();
             addOrder(cart.cartItems, totalCostCents);
+            sendEmailJS(form);
         }
         resetStorage();
         window.location.href = 'orders.html';
@@ -108,7 +118,36 @@ function handleFormSubmit(event) {
         window.location.href = 'register.html';
     }
 }
-renderPaymentSummaryCart();
-document.addEventListener('currencyChanged', renderPaymentSummaryCart);
-document.addEventListener('formSubmitSuccess', handleFormSubmit);
+function sendEmailJS(form) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const submitButton = document.querySelector(".checkout-btn");
+        submitButton.disabled = true;
+        try {
+            yield emailjs.sendForm("service_upc98dm", "template_qca63ue", form);
+            console.log("SUCCESS!");
+        }
+        catch (error) {
+            console.log("FAILED...", error);
+        }
+        finally {
+            submitButton.disabled = false;
+        }
+    });
+}
+function initializeCheckout() {
+    renderPaymentSummaryCart();
+    document.addEventListener('currencyChanged', renderPaymentSummaryCart);
+    document.addEventListener('formSubmitSuccess', handleFormSubmit);
+    const form = document.getElementById('contact-form');
+    if (form) {
+        form.addEventListener("submit", function (event) {
+            return __awaiter(this, void 0, void 0, function* () {
+                event.preventDefault();
+                const formEvent = new CustomEvent("formSubmitSuccess");
+                document.dispatchEvent(formEvent);
+            });
+        });
+    }
+}
+initializeCheckout();
 //# sourceMappingURL=checkout.js.map
