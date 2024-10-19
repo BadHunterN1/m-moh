@@ -99,35 +99,53 @@ function renderPaymentSummaryCart() {
     document.querySelectorAll('.price').forEach(updatePriceElement);
 }
 function handleFormSubmit(event) {
-    const form = document.getElementById('contact-form');
-    if (!form || !form.checkValidity()) {
-        form === null || form === void 0 ? void 0 : form.reportValidity();
-        return;
-    }
-    const authManager = AuthManager.getInstance();
-    if (authManager.isLoggedIn()) {
-        if (cart.cartItems.length > 0) {
-            const totalCostCents = calculateTotalPrice();
-            addOrder(cart.cartItems, totalCostCents);
-            sendEmailJS(form);
+    return __awaiter(this, void 0, void 0, function* () {
+        event.preventDefault();
+        const form = document.getElementById('contact-form');
+        if (!form || !form.checkValidity()) {
+            form === null || form === void 0 ? void 0 : form.reportValidity();
+            return;
         }
-        resetStorage();
-        window.location.href = 'orders.html';
-    }
-    else {
-        window.location.href = 'register.html';
-    }
+        const authManager = AuthManager.getInstance();
+        if (authManager.isLoggedIn()) {
+            if (cart.cartItems.length > 0) {
+                const totalCostCents = calculateTotalPrice();
+                try {
+                    // Send email first
+                    yield sendEmailJS(form);
+                    console.log("Email sent successfully");
+                    // If email is sent successfully, proceed with order
+                    addOrder(cart.cartItems, totalCostCents);
+                    resetStorage();
+                    window.location.href = 'orders.html';
+                }
+                catch (error) {
+                    console.error("Failed to send email:", error);
+                    // Handle the error (e.g., show an error message to the user)
+                }
+            }
+            else {
+                console.log("Cart is empty");
+                // Handle empty cart scenario
+            }
+        }
+        else {
+            window.location.href = 'register.html';
+        }
+    });
 }
 function sendEmailJS(form) {
     return __awaiter(this, void 0, void 0, function* () {
         const submitButton = document.querySelector(".checkout-btn");
         submitButton.disabled = true;
         try {
-            yield emailjs.sendForm("service_upc98dm", "template_qca63ue", form);
-            console.log("SUCCESS!");
+            const result = yield emailjs.sendForm("service_upc98dm", "template_qca63ue", form);
+            console.log("SUCCESS!", result.text);
+            return result;
         }
         catch (error) {
             console.log("FAILED...", error);
+            throw error;
         }
         finally {
             submitButton.disabled = false;
@@ -137,16 +155,9 @@ function sendEmailJS(form) {
 function initializeCheckout() {
     renderPaymentSummaryCart();
     document.addEventListener('currencyChanged', renderPaymentSummaryCart);
-    document.addEventListener('formSubmitSuccess', handleFormSubmit);
     const form = document.getElementById('contact-form');
     if (form) {
-        form.addEventListener("submit", function (event) {
-            return __awaiter(this, void 0, void 0, function* () {
-                event.preventDefault();
-                const formEvent = new CustomEvent("formSubmitSuccess");
-                document.dispatchEvent(formEvent);
-            });
-        });
+        form.addEventListener("submit", handleFormSubmit);
     }
 }
 initializeCheckout();

@@ -3,6 +3,7 @@ import { getProduct, getProductPriceInfo } from "../data/product.js";
 import { cart } from "../data/cart.js";
 import { convMoney } from "../data/money.js";
 import { getCurrencySymbol, initializeCurrency } from "../data/currency.js";
+import { renderOrderSummray, renderPaymentSummary } from "./global.js";
 initializeCurrency();
 // generate existing orders
 function renderOrder() {
@@ -111,6 +112,8 @@ function handleBuyAgain(event) {
         button.innerHTML = '<span class="buy-again-message">Buy it again</span>';
     }, 1000);
     cart.updateCartQuantity();
+    renderOrderSummray();
+    renderPaymentSummary();
 }
 // active delete order from order history
 function handleDeleteOrder(event) {
