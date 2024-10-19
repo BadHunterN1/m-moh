@@ -3,6 +3,16 @@ export function getProduct(productId) {
     const product = products.find((product) => product.id === productId);
     return product || null;
 }
+export function getProductPriceInfo(product) {
+    const hasDiscount = product.hasDiscount();
+    return {
+        originalPrice: product.getPrice(),
+        discountedPrice: product.getDiscountedPrice(),
+        hasDiscount,
+        originalPriceCents: product.priceCents,
+        discountedPriceCents: product.getDiscountedPriceCents()
+    };
+}
 export class Product {
     constructor(productDetails) {
         this.id = productDetails.id;
