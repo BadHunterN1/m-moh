@@ -1,4 +1,4 @@
-import { getProduct } from "../data/product.js";
+import { getProduct, getProductPriceInfo } from "../data/product.js";
 import { cart } from "../data/cart.js";
 import { renderOrderSummray, renderPaymentSummary } from "./global.js";
 import { getCurrencySymbol, updateAllPrices, initializeCurrency } from "../data/currency.js";
@@ -16,18 +16,15 @@ function renderproductDetails() {
         return;
     }
     ;
-    const originalPrice = matchingproduct.getPrice();
-    const discountedPrice = matchingproduct.getDiscountedPrice();
-    const hasDiscount = matchingproduct.hasDiscount();
+    const priceInfo = getProductPriceInfo(matchingproduct);
     document.title = matchingproduct.name;
     trackHTML = `
             <img src="${matchingproduct.image}" alt="" />
             <div class="view-info">
                 <h1>${matchingproduct.name}</h1>
                 <h3>
-                    ${hasDiscount ? `<span class="price original-price" data-original-price-usd-cents="${matchingproduct.priceCents}">${originalPrice} ${getCurrencySymbol()}</span> 
-                    <span class="price current-price" data-original-price-usd-cents="${matchingproduct.getDiscountedPriceCents()}">${discountedPrice} ${getCurrencySymbol()}</span>`
-        : `<span class="price current-price" data-original-price-usd-cents="${matchingproduct.priceCents}">${originalPrice}  ${getCurrencySymbol()}</span>`}
+                    ${priceInfo.hasDiscount ? `<span class="price original-price" data-original-price-usd-cents="${priceInfo.originalPriceCents}">${priceInfo.originalPrice} ${getCurrencySymbol()}</span><span class="price current-price" data-original-price-usd-cents="${priceInfo.discountedPriceCents}">${priceInfo.discountedPrice} ${getCurrencySymbol()}</span>`
+        : `<span class="price current-price" data-original-price-usd-cents="${priceInfo.originalPriceCents}">${priceInfo.originalPrice} ${getCurrencySymbol()}</span>`}
                 </h3>
                 <h5><strong>Notes:</strong></h5>
                 <ul>

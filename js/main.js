@@ -1,18 +1,16 @@
-import { products, getProduct } from "../data/product.js";
+import { products, getProduct, getProductPriceInfo } from "../data/product.js";
 import { cart } from "../data/cart.js";
 import { renderOrderSummray, renderPaymentSummary } from "./global.js";
 import { getCurrencySymbol, updateAllPrices, initializeCurrency } from "../data/currency.js";
 initializeCurrency();
 // generate cards to be put inside swiper
 function createProductHTML(product) {
-    const originalPrice = product.getPrice();
-    const discountedPrice = product.getDiscountedPrice();
-    const hasDiscount = product.hasDiscount();
+    const priceInfo = getProductPriceInfo(product);
     return `
         <div class="card swiper-slide">
             <div class="img-con">
 				<span ${product.availability ? 'style="display: none;"' : ''} class = "${product.availability ? '' : 'out-of-stock'}">OUT OF STOCK</span>
-				${hasDiscount ? `<span class="discount">${product.discountPercentage}% OFF</span>` : ''}
+				${priceInfo.hasDiscount ? `<span class="discount">${product.discountPercentage}% OFF</span>` : ''}
                 <div class="buttons">
                     <button class="view-button" data-product-id="${product.id}" data-pop="Quick view">
                         <i class="fa-solid fa-magnifying-glass"></i>
@@ -25,10 +23,10 @@ function createProductHTML(product) {
             </div>
             <a href="product-details.html?productId=${product.id}"><h4>${product.name}</h4></a>
             <p>${product.description}</p>
-            <div style = "text-align:center; padding: 10px 0;">
-                ${hasDiscount ? `<span class="price original-price" data-original-price-usd-cents="${product.priceCents}">${originalPrice} ${getCurrencySymbol()}</span>
-				<span class="price current-price" data-original-price-usd-cents="${product.getDiscountedPriceCents()}">${discountedPrice} ${getCurrencySymbol()}</span>`
-        : `<span class="price current-price" data-original-price-usd-cents="${product.priceCents}">${originalPrice}  ${getCurrencySymbol()}</span>`}
+            <div style="text-align:center; padding: 10px 0;">
+                ${priceInfo.hasDiscount
+        ? `<span class="price original-price" data-original-price-usd-cents="${priceInfo.originalPriceCents}">${priceInfo.originalPrice} ${getCurrencySymbol()}</span><span class="price current-price" data-original-price-usd-cents="${priceInfo.discountedPriceCents}">${priceInfo.discountedPrice} ${getCurrencySymbol()}</span>`
+        : `<span class="price current-price" data-original-price-usd-cents="${priceInfo.originalPriceCents}">${priceInfo.originalPrice} ${getCurrencySymbol()}</span>`}
             </div>
         </div>`;
 }
@@ -78,9 +76,7 @@ function setupQuickView() {
                 console.error("Product not found");
                 return;
             }
-            const originalPrice = matchingProduct.getPrice();
-            const discountedPrice = matchingProduct.getDiscountedPrice();
-            const hasDiscount = matchingProduct.hasDiscount();
+            const priceInfo = getProductPriceInfo(matchingProduct);
             const quickHtml = `
 				<button class="close">x</button>
 				<div class="view-product">
@@ -88,9 +84,9 @@ function setupQuickView() {
 					<div class="view-info">
 						<a href="product-details.html?productId=${matchingProduct.id}">${matchingProduct.name}</a>
 						<div>
-							${hasDiscount ? `<span class="price original-price" data-original-price-usd-cents="${matchingProduct.priceCents}">${originalPrice} ${getCurrencySymbol()}</span> 
-						<span class="price current-price" data-original-price-usd-cents="${matchingProduct.getDiscountedPriceCents()}">${discountedPrice} ${getCurrencySymbol()}</span>`
-                : `<span class="price current-price" data-original-price-usd-cents="${matchingProduct.priceCents}">${originalPrice}  ${getCurrencySymbol()}</span>`}
+						${priceInfo.hasDiscount
+                ? `<span class="price original-price" data-original-price-usd-cents="${priceInfo.originalPriceCents}">${priceInfo.originalPrice} ${getCurrencySymbol()}</span><span class="price current-price" data-original-price-usd-cents="${priceInfo.discountedPriceCents}">${priceInfo.discountedPrice} ${getCurrencySymbol()}</span>`
+                : `<span class="price current-price" data-original-price-usd-cents="${priceInfo.originalPriceCents}">${priceInfo.originalPrice} ${getCurrencySymbol()}</span>`}
 						</div>
 						<h5><strong>Notes:</strong></h5>
 						<ul>

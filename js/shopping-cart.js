@@ -1,4 +1,4 @@
-import { getProduct } from "../data/product.js";
+import { getProduct, getProductPriceInfo } from "../data/product.js";
 import { cart } from "../data/cart.js";
 import { convMoney } from "../data/money.js";
 import { renderOrderSummray } from "./global.js";
@@ -7,6 +7,7 @@ initializeCurrency();
 // generate cart table html
 function createCartItemHTML(cartItem, product) {
     if (product) {
+        const priceInfo = getProductPriceInfo(product);
         return `
             <tr>
                 <td><button class="delete" data-product-id="${product.id}">x</button></td>
@@ -14,7 +15,9 @@ function createCartItemHTML(cartItem, product) {
                     <img src="${product.image}" width="80" />
                 </td>
                 <td class="h-td">${product.name}</td>
-                <td class="price g" data-label="Price" data-original-price-usd-cents="${product.priceCents}">${convMoney(product.priceCents)} ${getCurrencySymbol()}</td>
+                <td class="g" data-label="Price">${priceInfo.hasDiscount ? `<span class="price original-price" data-original-price-usd-cents="${priceInfo.originalPriceCents}">${priceInfo.originalPrice} ${getCurrencySymbol()}</span>
+                <span class="price current-price" data-original-price-usd-cents="${priceInfo.discountedPriceCents}">${priceInfo.discountedPrice} ${getCurrencySymbol()}</span>`
+            : `<span class="price current-price" data-original-price-usd-cents="${priceInfo.originalPriceCents}">${priceInfo.originalPrice} ${getCurrencySymbol()}</span>`}</td>
                 <td class="quantity" data-label="Quantity">
                     <div class="product-quantity-container">
                         <div class="quantity-container">
@@ -47,7 +50,7 @@ function renderCartItems() {
                         <h1>No products in the cart.</h1>
                         <p>Before proceed to checkout you must add some products to your shopping cart.<br>
                         You will find a lot of interesting products on our "Shop" page.</p>
-                        <button class="in-cart-button"><a href="#">Return To Shop</a></button>
+                        <button class="in-cart-button"><a href="shop.html">Return To Shop</a></button>
                     </div>
                 </td>
             </tr>
@@ -100,25 +103,33 @@ function setupEventListeners() {
         });
     });
 }
-function calculateTotalPrice() {
-    return cart.cartItems.reduce((total, cartItem) => {
-        const product = getProduct(cartItem.productId);
-        return product ? total + (product.priceCents * cartItem.quantity) : total;
-    }, 0);
-}
 // generate paymentsummary for cart page
 function renderPaymentSummaryCart() {
-    const totalPriceCents = calculateTotalPrice();
+    let subtotalCents = 0;
+    let discountedSubtotalCents = 0;
+    let cartQuantity = 0;
+    cart.cartItems.forEach((cartItem) => {
+        const product = getProduct(cartItem.productId);
+        if (product) {
+            const priceInfo = getProductPriceInfo(product);
+            subtotalCents += priceInfo.originalPriceCents * cartItem.quantity;
+            discountedSubtotalCents += priceInfo.discountedPriceCents * cartItem.quantity;
+            cartQuantity += cartItem.quantity;
+        }
+    });
+    const finalTotalCents = cart.totalDiscount
+        ? Math.round(discountedSubtotalCents * (1 - cart.totalDiscount / 100))
+        : discountedSubtotalCents;
+    const finalTotal = convMoney(finalTotalCents);
     document.querySelector(".cart-totals").innerHTML = `
         <h2>CART TOTALS</h2>
         <div class="sub-totals-item">
             Subtotal
-            <span class="price" data-original-price-usd-cents="${totalPriceCents}">${convMoney(totalPriceCents)} ${getCurrencySymbol()}</span>
+            <span class="price current-price" data-original-price-usd-cents="${finalTotalCents}">${finalTotal} ${getCurrencySymbol()}</span>
         </div>
         <div class="totals-item">
             Total
-            <span class="total-price price" data-original-price-usd-cents="${totalPriceCents}">
-            ${convMoney(totalPriceCents)} ${getCurrencySymbol()}</span>
+            <span class="price current-price" data-original-price-usd-cents="${finalTotalCents}">${finalTotal} ${getCurrencySymbol()}</span>
         </div>
         <a class="checkout-btn" href ="${cart.cartItems.length === 0 ? '#' : 'checkout.html'}">PROCEED TO CHECKOUT</a>
     `;

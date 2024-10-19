@@ -4,12 +4,26 @@ import { convMoney } from "../data/money.js";
 import { getCurrencySymbol, initializeCurrency, updatePriceElement } from "../data/currency.js";
 import { addOrder } from "../data/orders.js";
 import { AuthManager } from "../data/authmanager.js";
+import { getProductPriceInfo } from "../data/product.js";
 initializeCurrency();
 function calculateTotalPrice() {
-    return cart.cartItems.reduce((total, { productId, quantity }) => {
-        const product = getProduct(productId);
-        return product ? total + (product.priceCents * quantity) : total;
-    }, 0);
+    let subtotalCents = 0;
+    let discountedSubtotalCents = 0;
+    let cartQuantity = 0;
+    cart.cartItems.forEach((cartItem) => {
+        const product = getProduct(cartItem.productId);
+        if (product) {
+            const priceInfo = getProductPriceInfo(product);
+            subtotalCents += priceInfo.originalPriceCents * cartItem.quantity;
+            discountedSubtotalCents += priceInfo.discountedPriceCents * cartItem.quantity;
+            cartQuantity += cartItem.quantity;
+        }
+    });
+    const finalTotalCents = cart.totalDiscount
+        ? Math.round(discountedSubtotalCents * (1 - cart.totalDiscount / 100))
+        : discountedSubtotalCents;
+    const finalTotal = finalTotalCents;
+    return finalTotal;
 }
 function updateCartTotals(totalPriceCents) {
     const cartTotalsElement = document.querySelector(".cart-totals");
@@ -33,17 +47,6 @@ function updateOrderSummary(totalPriceCents, cartQuantity) {
     if (!testDiv)
         return;
     testDiv.innerHTML = `  
-        <div class="form-input-material"> 
-            <textarea
-                style="color: gray"
-                name="order"
-                id="order"
-                placeholder=""
-                autocomplete="off"
-                class="form-control-material"
-                readonly></textarea>
-            <label for="order">Your Order</label>
-        </div>
         <div class="form-input-material">
             <input
                 style="color: gray"
@@ -57,6 +60,17 @@ function updateOrderSummary(totalPriceCents, cartQuantity) {
                 readonly
                 value="Your total price: ${convMoney(totalPriceCents)} ${getCurrencySymbol()}" />
             <label for="Full_Price">Total Price</label>
+        </div>
+        <div style="opacity: 0;" class="form-input-material"> 
+            <textarea
+                style="color: gray; height: 40px; pointer-events: none;"
+                name="order"
+                id="order"
+                placeholder=""
+                autocomplete="off"
+                class="form-control-material"
+                readonly></textarea>
+            <label for="order">Your Order</label>
         </div>`;
     cart.cartItems.forEach((cartItem) => {
         const productId = cartItem.productId;

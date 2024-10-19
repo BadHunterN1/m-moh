@@ -1,4 +1,4 @@
-import { getProduct } from "../data/product.js";
+import { getProduct, getProductPriceInfo } from "../data/product.js";
 import { cart } from "../data/cart.js";
 import { convMoney } from "../data/money.js";
 import { getCurrencySymbol, updateAllPrices } from "../data/currency.js";
@@ -284,6 +284,7 @@ export function renderOrderSummray() {
             const productId = cartItem.productId;
             const matchingproduct = getProduct(productId);
             if (matchingproduct) {
+                const priceInfo = getProductPriceInfo(matchingproduct);
                 cartSummHTML += `
 						<div class="item">
 							<img
@@ -314,7 +315,10 @@ export function renderOrderSummray() {
 								</div>
 								<div style = "display:flex">
 								<span class = "js-quantity-label-${matchingproduct.id}">
-								${cartItem.quantity}×</span><h4 class = "price" data-original-price-usd-cents = "${matchingproduct.priceCents}">${convMoney(matchingproduct.priceCents)} ${getCurrencySymbol()}</h4>
+								${cartItem.quantity}×</span><h4">
+								${priceInfo.hasDiscount ? `<span class="price original-price" data-original-price-usd-cents="${priceInfo.originalPriceCents}">${priceInfo.originalPrice} ${getCurrencySymbol()}</span><span class="price current-price" data-original-price-usd-cents="${priceInfo.discountedPriceCents}">${priceInfo.discountedPrice} ${getCurrencySymbol()}</span>`
+                    : `<span class="price current-price" data-original-price-usd-cents="${priceInfo.originalPriceCents}">${priceInfo.originalPrice} ${getCurrencySymbol()}</span>`}
+            </h4>
 								</div>
 							</div>
 							<button class="delete" data-product-id= '${matchingproduct.id}' >x</button>
@@ -396,20 +400,25 @@ export function renderOrderSummray() {
 renderOrderSummray();
 // generate aside renderSummray for all pages
 export function renderPaymentSummary() {
-    let productPriceCents = 0;
+    let subtotalCents = 0;
+    let discountedSubtotalCents = 0;
+    let cartQuantity = 0;
     cart.cartItems.forEach((cartItem) => {
         const product = getProduct(cartItem.productId);
         if (product) {
-            productPriceCents += product.priceCents * cartItem.quantity;
+            const priceInfo = getProductPriceInfo(product);
+            subtotalCents += priceInfo.originalPriceCents * cartItem.quantity;
+            discountedSubtotalCents += priceInfo.discountedPriceCents * cartItem.quantity;
+            cartQuantity += cartItem.quantity;
         }
     });
-    let cartQuantity = 0;
-    cart.cartItems.forEach((cartItem) => {
-        cartQuantity += cartItem.quantity;
-    });
+    const finalTotalCents = cart.totalDiscount
+        ? Math.round(discountedSubtotalCents * (1 - cart.totalDiscount / 100))
+        : discountedSubtotalCents;
+    const finalTotal = convMoney(finalTotalCents);
     const paymentSummaryHTML = `
 		<h4>Subtotal:</h4>
-		<span class = "price" data-original-price-usd-cents = "${productPriceCents}">${convMoney(productPriceCents)} ${getCurrencySymbol()}</span>
+            <span class="price current-price" data-original-price-usd-cents="${finalTotalCents}">${finalTotal} ${getCurrencySymbol()}</span>
 	`;
     document.querySelector(".cart-price").innerHTML =
         paymentSummaryHTML;
