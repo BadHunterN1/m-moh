@@ -26,39 +26,6 @@
 					publicKey: "Y6R8w8Ooh_3NRjRc9",
 				});
 			})();
-
-			window.onload = function () {
-				let isEmailSent = false;
-
-				document
-					.getElementById("contact-form")
-					.addEventListener("submit", async function (event) {
-						event.preventDefault();
-
-						if (isEmailSent) return;
-
-						isEmailSent = true;
-						const submitButton = document.querySelector(".checkout-btn");
-						submitButton.disabled = true;
-
-						try {
-							await emailjs.sendForm(
-								"service_upc98dm",
-								"template_qca63ue",
-								this
-							);
-							console.log("SUCCESS!");
-
-							const formEvent = new CustomEvent("formSubmitSuccess");
-							document.dispatchEvent(formEvent);
-						} catch (error) {
-							console.log("FAILED...", error);
-						} finally {
-							submitButton.disabled = false;
-							isEmailSent = false;
-						}
-					});
-			};
 		</script>
 	</head>
 	<body>
