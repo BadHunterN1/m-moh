@@ -1,7 +1,7 @@
 import { convMoney } from "../data/money.js";
 export function getProduct(productId) {
     const product = products.find((product) => product.id === productId);
-    return product || null; // Return null if product is not found
+    return product || null;
 }
 export class Product {
     constructor(productDetails) {
@@ -12,12 +12,25 @@ export class Product {
         this.description = productDetails.description;
         this.type = productDetails.type;
         this.keywords = productDetails.keywords;
+        this.availability = productDetails.availability;
+        this.discountPercentage = productDetails.discountPercentage;
+        // Object.assign(this, productDetails);
     }
     getPrice() {
         return convMoney(this.priceCents);
     }
+    getDiscountedPriceCents() {
+        if (!this.discountPercentage)
+            return this.priceCents;
+        return Math.floor(this.priceCents * (1 - this.discountPercentage / 100));
+    }
+    getDiscountedPrice() {
+        return convMoney(this.getDiscountedPriceCents());
+    }
+    hasDiscount() {
+        return !!this.discountPercentage && this.discountPercentage > 0;
+    }
 }
-
 export const products = [
     {
         id: "1",
@@ -27,6 +40,7 @@ export const products = [
         priceCents: 500,
         keywords: ["Steam Wallet Code USA USD 20", "Steam", "Wallet"],
         type: "steam",
+        availability: true,
     },
     {
         id: "2",
@@ -36,6 +50,7 @@ export const products = [
         priceCents: 1000,
         keywords: ["Steam Wallet Code USA USD 10", "Steam", "Wallet"],
         type: "steam",
+        availability: true,
     },
     {
         id: "3",
@@ -45,6 +60,7 @@ export const products = [
         priceCents: 2000,
         keywords: ["Steam Wallet Code USA USD 20", "Steam", "Wallet"],
         type: "steam",
+        availability: true,
     },
     {
         id: "4",
@@ -54,6 +70,7 @@ export const products = [
         priceCents: 5000,
         keywords: ["Steam Wallet Code USA USD 50", "Steam", "Wallet"],
         type: "steam",
+        availability: true,
     },
     {
         id: "5",
@@ -63,6 +80,8 @@ export const products = [
         priceCents: 10000,
         keywords: ["Steam Wallet Code USA USD 100", "Steam", "Wallet"],
         type: "steam",
+        availability: true,
+        discountPercentage: 10,
     },
     {
         id: "6",
@@ -72,6 +91,7 @@ export const products = [
         priceCents: 10000,
         keywords: ["playstation network card 10 uae", "playstation", "psn"],
         type: "playstation",
+        availability: true,
     },
     {
         id: "7",
@@ -81,6 +101,7 @@ export const products = [
         priceCents: 2000,
         keywords: ["playstation network card 20 ksa", "playstation", "psn"],
         type: "playstation",
+        availability: true,
     },
     {
         id: "8",
@@ -90,6 +111,7 @@ export const products = [
         priceCents: 4000,
         keywords: ["playstation network card 40 uae", "playstation", "psn"],
         type: "playstation",
+        availability: false,
     },
     {
         id: "9",
@@ -99,6 +121,7 @@ export const products = [
         priceCents: 5000,
         keywords: ["playstation network card 50 kw", "playstation", "psn"],
         type: "playstation",
+        availability: true,
     },
     {
         id: "10",
@@ -108,6 +131,7 @@ export const products = [
         priceCents: 7500,
         keywords: ["playstation network card 75 us", "playstation", "psn"],
         type: "playstation",
+        availability: true,
     },
     {
         id: "11",
@@ -117,7 +141,8 @@ export const products = [
         priceCents: 10000,
         keywords: ["playstation network card 100 kw", "playstation", "psn"],
         type: "playstation",
-    },    
+        availability: true,
+    },
     {
         id: "12",
         image: "imgs/20-EUR-Valorant-Points-430x575.png",
@@ -126,6 +151,7 @@ export const products = [
         priceCents: 2144,
         keywords: ["20 EUR Valorant Points", "Valorant", "points"],
         type: "valorant",
+        availability: true,
     },
     {
         id: "13",
@@ -135,6 +161,7 @@ export const products = [
         priceCents: 2680,
         keywords: ["25 EUR Valorant Points", "Valorant", "points"],
         type: "valorant",
+        availability: true,
     },
     {
         id: "14",
@@ -144,6 +171,7 @@ export const products = [
         priceCents: 5350,
         keywords: ["50 EUR Valorant Points", "Valorant", "points"],
         type: "valorant",
+        availability: true,
     },
     {
         id: "15",
@@ -153,6 +181,7 @@ export const products = [
         priceCents: 10700,
         keywords: ["100 EUR Valorant Points", "Valorant", "points"],
         type: "valorant",
+        availability: true,
     },
     {
         id: "16",
@@ -162,6 +191,7 @@ export const products = [
         priceCents: 90,
         keywords: ["PUBG MOBILE 60 UC (GLOBAL)", "PUBG", "MOBILE", "uc"],
         type: "PUBG MOBILE",
+        availability: true,
     },
     {
         id: "17",
@@ -171,6 +201,7 @@ export const products = [
         priceCents: 450,
         keywords: ["PUBG MOBILE 325 UC (GLOBAL)", "PUBG", "MOBILE", "uc"],
         type: "PUBG MOBILE",
+        availability: true,
     },
     {
         id: "18",
@@ -180,6 +211,7 @@ export const products = [
         priceCents: 900,
         keywords: ["PUBG MOBILE 660 UC (GLOBAL)", "PUBG", "MOBILE", "uc"],
         type: "PUBG MOBILE",
+        availability: true,
     },
     {
         id: "19",
@@ -189,6 +221,7 @@ export const products = [
         priceCents: 2250,
         keywords: ["PUBG MOBILE 1800 UC (GLOBAL)", "PUBG", "MOBILE", "uc"],
         type: "PUBG MOBILE",
+        availability: true,
     },
 ].map((productDetails) => {
     return new Product(productDetails);
