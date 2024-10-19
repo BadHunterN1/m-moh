@@ -16,19 +16,26 @@ function renderproductDetails() {
         return;
     }
     ;
+    const originalPrice = matchingproduct.getPrice();
+    const discountedPrice = matchingproduct.getDiscountedPrice();
+    const hasDiscount = matchingproduct.hasDiscount();
     document.title = matchingproduct.name;
     trackHTML = `
             <img src="${matchingproduct.image}" alt="" />
             <div class="view-info">
                 <h1>${matchingproduct.name}</h1>
-                <h3 class="price" data-original-price-usd-cents="${matchingproduct.getPrice()}">${matchingproduct.getPrice()} ${getCurrencySymbol()}</h3>
+                <h3>
+                    ${hasDiscount ? `<span class="price original-price" data-original-price-usd-cents="${matchingproduct.priceCents}">${originalPrice} ${getCurrencySymbol()}</span> 
+                    <span class="price current-price" data-original-price-usd-cents="${matchingproduct.getDiscountedPriceCents()}">${discountedPrice} ${getCurrencySymbol()}</span>`
+        : `<span class="price current-price" data-original-price-usd-cents="${matchingproduct.priceCents}">${originalPrice}  ${getCurrencySymbol()}</span>`}
+                </h3>
                 <h5><strong>Notes:</strong></h5>
                 <ul>
                     <li>
                         Sale items are not eligible for returns, exchanges, or refunds.
                     </li>
                 </ul>
-                <div class="input">
+                <div ${matchingproduct.availability ? '' : 'style="display: none;"'} class="input">
                     <div class="product-quantity-container">
                         <div class="quantity-container">
                             <button
@@ -53,6 +60,7 @@ function renderproductDetails() {
                         ADD TO CART
                     </button>
                 </div>
+				<p style="color: #ff0000; ${matchingproduct.availability ? 'display: none;' : ''}" >Out Of Stock</p>
                 <p><strong>Categories:</strong> ${matchingproduct.type}</p>
                 <p>
                     <strong>Share:</strong>

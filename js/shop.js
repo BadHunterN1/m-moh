@@ -1,5 +1,4 @@
 import { products, getProduct } from '../data/product.js';
-import { convMoney } from '../data/money.js';
 import { cart } from '../data/cart.js';
 import { getCurrencySymbol, updateAllPrices, initializeCurrency } from "../data/currency.js";
 import { renderOrderSummray, renderPaymentSummary } from './global.js';
@@ -73,14 +72,19 @@ class ProductListing {
         }, isInitialLoad ? 0 : 300);
     }
     createProductHTML(product) {
+        const originalPrice = product.getPrice();
+        const discountedPrice = product.getDiscountedPrice();
+        const hasDiscount = product.hasDiscount();
         return `
             <div class="card fade-in">
                 <div class="img-con">
+                <span ${product.availability ? 'style="display: none;"' : ''} class = "${product.availability ? '' : 'out-of-stock'}">OUT OF STOCK</span>
+				${hasDiscount ? `<span class="discount">${product.discountPercentage}% OFF</span>` : ''}
                     <div class="buttons">
                         <button class="view-button" data-product-id="${product.id}" data-pop="Quick view">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
-                        <button class="add-to-cart" data-product-id="${product.id}" data-pop="Add to Cart">
+                        <button ${product.availability ? '' : 'style="display: none;"'} class="add-to-cart" data-product-id="${product.id}" data-pop="Add to Cart">
                             <i class="fa-solid fa-cart-shopping"></i>
                         </button>
                     </div>
@@ -92,8 +96,10 @@ class ProductListing {
                     <h4>${product.name}</h4>
                 </a>
                 <p>${product.description}</p>
-                <div class="price" data-original-price-usd-cents="${product.priceCents}">
-                    ${convMoney(product.priceCents)} ${getCurrencySymbol()}
+                <div style = "text-align:center; padding: 10px 0;">
+                    ${hasDiscount ? `<span class="price original-price" data-original-price-usd-cents="${product.priceCents}">${originalPrice} ${getCurrencySymbol()}</span> 
+                <span class="price current-price" data-original-price-usd-cents="${product.getDiscountedPriceCents()}">${discountedPrice} ${getCurrencySymbol()}</span>`
+            : `<span class="price current-price" data-original-price-usd-cents="${product.priceCents}">${originalPrice}  ${getCurrencySymbol()}</span>`}
                 </div>
             </div>
         `;
@@ -159,20 +165,25 @@ class ProductListing {
         updateAllPrices();
     }
     createQuickViewHTML(product) {
+        const originalPrice = product.getPrice();
+        const discountedPrice = product.getDiscountedPrice();
+        const hasDiscount = product.hasDiscount();
         return `
             <button class="close">x</button>
             <div class="view-product">
                 <img src="${product.image}" alt="${product.name}" />
                 <div class="view-info">
                     <a href="product-details.html?productId=${product.id}">${product.name}</a>
-                    <div class="price" data-original-price-usd-cents="${product.priceCents}">
-                        ${convMoney(product.priceCents)} ${getCurrencySymbol()}
+                    <div>
+                        ${hasDiscount ? `<span class="price original-price" data-original-price-usd-cents="${product.priceCents}">${originalPrice} ${getCurrencySymbol()}</span> 
+                    <span class="price current-price" data-original-price-usd-cents="${product.getDiscountedPriceCents()}">${discountedPrice} ${getCurrencySymbol()}</span>`
+            : `<span class="price current-price" data-original-price-usd-cents="${product.priceCents}">${originalPrice}  ${getCurrencySymbol()}</span>`}
                     </div>
                     <h5><strong>Notes:</strong></h5>
                     <ul>
                         <li>Sale items are not eligible for returns, exchanges, or refunds.</li>
                     </ul>
-                    <div class="input">
+                    <div ${product.availability ? '' : 'style="display: none;"'} class="input">
                         <div class="product-quantity-container">
                             <div class="quantity-container">
                                 <button class="quantity-btn minus">-</button>
@@ -182,6 +193,7 @@ class ProductListing {
                         </div>
                         <button class="add-to-cart" data-product-id='${product.id}'>ADD TO CART</button>
                     </div>
+				    <p style="color: #ff0000; ${product.availability ? 'display: none;' : ''}" >Out Of Stock</p>
                     <p><strong>Categories:</strong> ${product.type}</p>
                     <p>
                         <strong>Share:</strong> 

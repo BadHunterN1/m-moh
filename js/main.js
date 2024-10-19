@@ -1,19 +1,23 @@
 import { products, getProduct } from "../data/product.js";
 import { cart } from "../data/cart.js";
 import { renderOrderSummray, renderPaymentSummary } from "./global.js";
-import { convMoney } from "../data/money.js";
 import { getCurrencySymbol, updateAllPrices, initializeCurrency } from "../data/currency.js";
 initializeCurrency();
 // generate cards to be put inside swiper
 function createProductHTML(product) {
+    const originalPrice = product.getPrice();
+    const discountedPrice = product.getDiscountedPrice();
+    const hasDiscount = product.hasDiscount();
     return `
         <div class="card swiper-slide">
             <div class="img-con">
+				<span ${product.availability ? 'style="display: none;"' : ''} class = "${product.availability ? '' : 'out-of-stock'}">OUT OF STOCK</span>
+				${hasDiscount ? `<span class="discount">${product.discountPercentage}% OFF</span>` : ''}
                 <div class="buttons">
                     <button class="view-button" data-product-id="${product.id}" data-pop="Quick view">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
-                    <button data-pop="Add to Cart" class="add-to-cart" data-product-id="${product.id}">
+                    <button ${product.availability ? '' : 'style="display: none;"'} data-pop="Add to Cart" class="add-to-cart" data-product-id="${product.id}">
                         <i class="fa-solid fa-cart-shopping"></i>
                     </button>
                 </div>
@@ -21,8 +25,10 @@ function createProductHTML(product) {
             </div>
             <a href="product-details.html?productId=${product.id}"><h4>${product.name}</h4></a>
             <p>${product.description}</p>
-            <div class="price" data-original-price-usd-cents="${product.priceCents}">
-                ${convMoney(product.priceCents)} ${getCurrencySymbol()}
+            <div style = "text-align:center; padding: 10px 0;">
+                ${hasDiscount ? `<span class="price original-price" data-original-price-usd-cents="${product.priceCents}">${originalPrice} ${getCurrencySymbol()}</span>
+				<span class="price current-price" data-original-price-usd-cents="${product.getDiscountedPriceCents()}">${discountedPrice} ${getCurrencySymbol()}</span>`
+        : `<span class="price current-price" data-original-price-usd-cents="${product.priceCents}">${originalPrice}  ${getCurrencySymbol()}</span>`}
             </div>
         </div>`;
 }
@@ -72,18 +78,25 @@ function setupQuickView() {
                 console.error("Product not found");
                 return;
             }
+            const originalPrice = matchingProduct.getPrice();
+            const discountedPrice = matchingProduct.getDiscountedPrice();
+            const hasDiscount = matchingProduct.hasDiscount();
             const quickHtml = `
 				<button class="close">x</button>
 				<div class="view-product">
 					<img src="${matchingProduct.image}" alt="" />
 					<div class="view-info">
 						<a href="product-details.html?productId=${matchingProduct.id}">${matchingProduct.name}</a>
-						<div class="price" data-original-price-usd-cents="${matchingProduct.priceCents}">${matchingProduct.getPrice()} ${getCurrencySymbol()}</div>
+						<div>
+							${hasDiscount ? `<span class="price original-price" data-original-price-usd-cents="${matchingProduct.priceCents}">${originalPrice} ${getCurrencySymbol()}</span> 
+						<span class="price current-price" data-original-price-usd-cents="${matchingProduct.getDiscountedPriceCents()}">${discountedPrice} ${getCurrencySymbol()}</span>`
+                : `<span class="price current-price" data-original-price-usd-cents="${matchingProduct.priceCents}">${originalPrice}  ${getCurrencySymbol()}</span>`}
+						</div>
 						<h5><strong>Notes:</strong></h5>
 						<ul>
 							<li>Sale items are not eligible for returns, exchanges, or refunds.</li>
 						</ul>
-						<div class="input">
+						<div ${matchingProduct.availability ? '' : 'style="display: none;"'} class="input">
 							<div class="product-quantity-container">
 								<div class="quantity-container">
 									<button class="quantity-btn" onclick="this.nextElementSibling.stepDown()">-</button>
@@ -93,6 +106,7 @@ function setupQuickView() {
 							</div>
 							<button class="add-to-cart add-to-cart-d" data-product-id='${matchingProduct.id}'>ADD TO CART</button>
 						</div>
+						<p style="color: #ff0000; ${matchingProduct.availability ? 'display: none;' : ''}" >Out Of Stock</p>
 						<p><strong>Categories:</strong> ${matchingProduct.type}</p>
 						<p>
 							<strong>Share:</strong> 
