@@ -7,14 +7,18 @@ export class AuthManager {
         return AuthManager.instance;
     }
     isLoggedIn() {
-        return localStorage.getItem('username') !== null;
+        return localStorage.getItem('currentUser') !== null;
     }
     login(username) {
-        localStorage.setItem('username', username);
+        localStorage.setItem('currentUser', username);
         this.updateHeader();
     }
     logout() {
-        localStorage.removeItem('username');
+        const currentUser = localStorage.getItem('currentUser');
+        if (currentUser) {
+            localStorage.removeItem(currentUser);
+            localStorage.removeItem('currentUser');
+        }
         this.updateHeader();
     }
     register(username, password) {
@@ -28,7 +32,7 @@ export class AuthManager {
     updateHeader() {
         const signInElements = document.querySelectorAll('.sign-in');
         const dropdownMenu1 = document.getElementById('dropdownMenu1');
-        const username = localStorage.getItem('username');
+        const username = localStorage.getItem('currentUser');
         signInElements.forEach((element) => {
             if (username) {
                 element.textContent = `Hello, ${username}`;
