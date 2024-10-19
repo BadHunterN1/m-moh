@@ -15,9 +15,6 @@ IM ALIVE offers a fully responsive, dynamic e-commerce experience with features 
 - **Checkout & Email Confirmation:**
   User-friendly checkout form for billing information, including email and phone number. After checkout, a summary email is sent with order details and receipt.
 
-- **User Authentication:**
-  Register and log in to track orders, providing a personalized experience and viewing order history.
-
 - **Responsive Design:**
   Optimized for mobile and desktop, offering a consistent experience across devices using CSS media queries.
 
@@ -32,6 +29,26 @@ IM ALIVE offers a fully responsive, dynamic e-commerce experience with features 
 5. **EmailJS:** Sends email confirmations upon order completion.
 6. **localStorage:** Stores cart data and order history.
 7. **Google Fonts & FontAwesome:** Enhances the UI with custom fonts and icons.
+
+## 📄 **Detailed Page Breakdown**
+
+### **Home Page (index.html)**
+- Displays a dynamic list of products, with each showing a brief description, price, and "Add to Cart" button.
+
+### **Product Details Page**
+- Users can view a detailed product description, price, availability, and images. Quantities can be selected, and products can be added to the cart from here.
+
+### **Shopping Cart Page (cart.html)**
+- Lists the items added to the cart with options to adjust quantities, remove products, and view the total cost. The cart updates dynamically as users make changes.
+
+### **Checkout Page (checkout.html)**
+- Collects the user’s billing information, displays the total price, and allows users to place an order. After placing the order, an email receipt is sent.
+
+### **Order History Page (orders.html)**
+- Logged-in users can view a history of all their past orders, including product details, quantities, and total cost.
+
+### **Login and Registration Pages**
+- New users can create an account, while returning users can log in. Registered users can view their orders and other personalized details.
 
 ## 🚀 **How to Use**
 1. **Browse Products:** Start by exploring the main page product listings.
