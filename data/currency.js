@@ -8,37 +8,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { convMoney, setCurrencyValue } from "../data/money.js";
-const API_KEY = '9201780f68af4fe19b50557cccc60b1f';
 const availableCurrencies = {
     usd: { symbol: "USD$", conversionRate: 1 },
-    egp: { symbol: "EGP", conversionRate: 50 }
+    egp: { symbol: "EGP", conversionRate: 49.76 }
 };
 let currentCurrency = "usd";
-function updateEGPConversionRate() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const response = yield fetch(`https://api.currencyfreaks.com/latest?apikey=${API_KEY}&symbols=EGP`);
-            if (!response.ok)
-                throw new Error(`HTTP error! status: ${response.status}`);
-            const data = yield response.json();
-            const egpRate = parseFloat(data.rates.EGP);
-            if (egpRate) {
-                availableCurrencies.egp.conversionRate = egpRate;
-                console.log('Updated EGP conversion rate:', egpRate);
-                if (currentCurrency === "egp") {
-                    setCurrencyValue(egpRate);
-                    updateAllPrices();
-                }
-            }
-            else {
-                console.error('Failed to fetch EGP rate from API');
-            }
-        }
-        catch (error) {
-            console.error('Error fetching currency data:', error);
-        }
-    });
-}
+// const API_KEY = '9201780f68af4fe19b50557cccc60b1f';
+// async function updateEGPConversionRate(): Promise<void> {
+//     try {
+//         const response = await fetch(`https://api.currencyfreaks.com/latest?apikey=${API_KEY}&symbols=EGP`);
+//         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+//         const data = await response.json();
+//         const egpRate = parseFloat(data.rates.EGP);
+//         if (egpRate) {
+//             availableCurrencies.egp.conversionRate = egpRate;
+//             console.log('Updated EGP conversion rate:', egpRate);
+//             if (currentCurrency === "egp") {
+//                 setCurrencyValue(egpRate);
+//                 updateAllPrices();
+//             }
+//         } else {
+//             console.error('Failed to fetch EGP rate from API');
+//         }
+//     } catch (error) {
+//         console.error('Error fetching currency data:', error);
+//     }
+// }
 export function getCurrencySymbol() {
     return availableCurrencies[currentCurrency].symbol;
 }
@@ -61,9 +56,9 @@ export function updateAllPrices() {
 }
 function changeCurrency(value) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (value === "egp" && availableCurrencies.egp.conversionRate === 1) {
-            yield updateEGPConversionRate();
-        }
+        // if (value === "egp" && availableCurrencies.egp.conversionRate === 1) {
+        //     await updateEGPConversionRate();
+        // }
         currentCurrency = value;
         setCurrencyValue(availableCurrencies[value].conversionRate);
         localStorage.setItem("currency", value);
@@ -116,5 +111,5 @@ export function initializeCurrency() {
         setupCurrencyDropdowns();
     }
 }
-updateEGPConversionRate();
+// updateEGPConversionRate();
 //# sourceMappingURL=currency.js.map
