@@ -1,5 +1,5 @@
 Overview
-m-moh is an interactive e-commerce website aimed at providing users with a seamless online shopping experience.
+IM ALIVE is an interactive e-commerce website aimed at providing users with a seamless online shopping experience.
 the platform allows customers to browse a selection of digital and physical products, manage their shopping cart, and complete the checkout process. Users are given an opportunity to register and log in, ensuring personalized experiences such as tracking their order history. A dynamic email notification system confirms each purchase, providing customers with detailed receipts and ensuring transparency.
 The site leverages JavaScript for frontend functionality, EmailJS for communication, and localStorage for maintaining persistent cart data. Responsiveness is a key focus, enabling users to have a fluid experience across different screen sizes and devices.
 
@@ -56,26 +56,26 @@ Detailed Page Breakdown:
  Simple user authentication system allowing new users to register and returning users to log in. Registered users benefit from the ability to view and track their orders.
 
 Technologies Used:
-1- HTML/CSS/SCSS: For the structure and styling of the web pages.
-2- JavaScript (ES6)/TypeScript: Handles interactive elements, cart management, and checkout logic.
-3- Swiperjs: Handle IMG Swipers In Page.
-4- CurrencyAPI: For real time prices converts USD to EGP.
-5- EmailJS: Sends order confirmation emails to users after a successful checkout.
-6- LocalStorage: Stores cart, orderHistory data so users don’t lose their selections when navigating between pages or closing the browser.
-7- Google Fonts: Custom fonts ensure a clean and professional design.
-8- Font Awesome: Provides modern icons for the user interface.
-9- CSS Media Queries: Responsive design techniques ensure the site works seamlessly across devices.
+ 1- HTML/CSS/SCSS: For the structure and styling of the web pages.
+ 2- JavaScript (ES6)/TypeScript: Handles interactive elements, cart management, and checkout logic.
+ 3- Swiperjs: Handle IMG Swipers In Page.
+ 4- CurrencyAPI: For real time prices converts USD to EGP.
+ 5- EmailJS: Sends order confirmation emails to users after a successful checkout.
+ 6- LocalStorage: Stores cart, orderHistory data so users don’t lose their selections when navigating between pages or closing the browser.
+ 7- Google Fonts: Custom fonts ensure a clean and professional design.
+ 8- Font Awesome: Provides modern icons for the user interface.
+ 9- CSS Media Queries: Responsive design techniques ensure the site works seamlessly across devices.
 
 Usage:
-1-Product Exploration: Start by browsing the available products on the home page.
-2-Add to Cart: Click on "Add to Cart" buttons to begin building your order.
-3-Checkout: Once done, proceed to checkout to fill in your billing details and submit your order.
-4-Order Confirmation: After placing your order, you’ll receive an email summarizing your purchase.
+ 1-Product Exploration: Start by browsing the available products on the home page.
+ 2-Add to Cart: Click on "Add to Cart" buttons to begin building your order.
+ 3-Checkout: Once done, proceed to checkout to fill in your billing details and submit your order.
+ 4-Order Confirmation: After placing your order, you’ll receive an email summarizing your purchase.
 
 Future Improvements:
-1-Integrated Payment Gateways: Enable real payments using Stripe or PayPal.
-2-Improved User Accounts: Allow users to save their addresses and payment methods for faster checkouts.
-3-Ratings and Reviews: Provide users with the ability to review products they’ve purchased.
+ 1-Integrated Payment Gateways: Enable real payments using Stripe or PayPal.
+ 2-Improved User Accounts: Allow users to save their addresses and payment methods for faster checkouts.
+ 3-Ratings and Reviews: Provide users with the ability to review products they’ve purchased.
 
 THX,
 By BadHunterN1(Ahmed Moh)
