@@ -212,7 +212,7 @@ function generateFooter() {
 // generate development copyright
 function generateEnd() {
     return htmlEnd = `
-	<a href="#"><strong>IAM LIVE</strong></a> 2022 Created By
+	<a href="#"><strong>IAM LIVE</strong></a> 2024 Created By
 	<strong>BadHunterN1</strong>.
 `;
 }
