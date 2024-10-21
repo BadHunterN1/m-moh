@@ -38,9 +38,41 @@
 				</p>
 			</div>
 		</div>
+		<div class="container">
+			<div class="instructions">
+				<div class="steps">
+					<h2>1. How To Pay?</h2>
+					<ul>
+						<li>
+							Open Your <span class="wallet">WALLET</span> App
+							<i class="fa-solid fa-arrow-right-long"></i>
+						</li>
+						<li>
+							Choose Money Transfer
+							<i class="fa-solid fa-arrow-right-long"></i>
+						</li>
+						<li>
+							Enter one of the following numbers according to your
+							<span class="wallet">WALLET</span>:
+						</li>
+						<ul>
+							<li><span class="we">We:</span> 01520697551</li>
+							<li><span class="vodafone">Vodafone:</span> 01020697551</li>
+							<li><span class="orange">Orange:</span> 01220697551</li>
+							<li><span class="etisalat">Etisalat:</span> 01120697551</li>
+						</ul>
+					</ul>
+
+					<h3>
+						For more Details
+						<span class="more-info-button vodafone">Press Here.</span>
+					</h3>
+				</div>
+			</div>
+		</div>
 		<div class="container form">
 			<form class="login-form" id="contact-form">
-				<h1>Billing details</h1>
+				<h1>2. Billing details</h1>
 				<div class="input-wrap">
 					<div class="form-input-material">
 						<input
@@ -68,14 +100,16 @@
 				<div class="input-wrap">
 					<div class="form-input-material">
 						<input
-							type="number"
-							name="number"
-							id="number"
+							type="text"
+							name="phone"
+							id="phone"
 							placeholder=""
 							autocomplete="off"
 							class="form-control-material"
+							minlength="11"
+							maxlength="11"
 							required />
-						<label for="number">Phone</label>
+						<label for="phone">Phone</label>
 					</div>
 					<div class="form-input-material">
 						<input
@@ -90,29 +124,63 @@
 							readonly />
 					</div>
 				</div>
-				<div class="form-input-material">
-					<input
-						type="email"
-						name="from_email"
-						id="from_email"
-						placeholder=" "
-						autocomplete="off"
-						class="form-control-material"
-						required />
-					<label for="from_email">Email Address</label>
+				<div class="input-wrap">
+					<div class="form-input-material">
+						<input
+							type="email"
+							name="from_email"
+							id="from_email"
+							placeholder=" "
+							autocomplete="off"
+							class="form-control-material"
+							required />
+						<label for="from_email">Email Address</label>
+					</div>
+					<div class="form-input-material">
+						<input
+							type="text"
+							name="trx_id"
+							id="trx_id"
+							placeholder=" "
+							autocomplete="off"
+							class="form-control-material"
+							minlength="12"
+							maxlength="12"
+							required />
+						<label for="trx_id">Trx ID</label>
+					</div>
 				</div>
-				<div class="form-input-material">
+				<!-- <div class="form-input-material" style="margin: 0">
 					<input
-						type="text"
-						name="rate"
-						id="rate"
+						type="hidden"
+						name="image_upload1"
+						id="image_upload1"
 						placeholder=""
 						autocomplete="off"
 						class="form-control-material"
-						required />
-					<label for="rate">Your Opinion</label>
+						readonly />
+				</div> -->
+				<div
+					style="opacity: 0; height: 1px; pointer-events: none; margin: 0"
+					class="form-input-material">
+					<textarea
+						name="image"
+						id="image"
+						placeholder=""
+						autocomplete="off"
+						class="form-control-material"
+						readonly></textarea>
 				</div>
 				<div class="input-wrap test"></div>
+				<div class="form-input-material">
+					<input
+						type="file"
+						name="image_upload"
+						id="image_upload"
+						accept="image/*"
+						class="form-control-material" />
+					<label for="image_upload">Upload TRX ID (Optional)</label>
+				</div>
 				<button type="submit" class="checkout-btn">Place Order</button>
 			</form>
 			<div class="cart-totals"></div>
