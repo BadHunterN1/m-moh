@@ -9,8 +9,6 @@ function createProductHTML(product) {
     return `
         <div class="card swiper-slide">
             <div class="img-con">
-				<span ${product.availability ? 'style="display: none;"' : ''} class = "${product.availability ? '' : 'out-of-stock'}">OUT OF STOCK</span>
-				${priceInfo.hasDiscount ? `<span class="discount">${product.discountPercentage}% OFF</span>` : ''}
                 <div class="buttons">
                     <button class="view-button" data-product-id="${product.id}" data-pop="Quick view">
                         <i class="fa-solid fa-magnifying-glass"></i>
@@ -19,7 +17,11 @@ function createProductHTML(product) {
                         <i class="fa-solid fa-cart-shopping"></i>
                     </button>
                 </div>
-                <a href="product-details.html?productId=${product.id}"><img src="${product.image}" alt="${product.name}"></a>
+                <a href="product-details.html?productId=${product.id}">
+					<span ${product.availability ? 'style="display: none;"' : ''} class = "${product.availability ? '' : 'out-of-stock'}">OUT OF STOCK</span>
+					${priceInfo.hasDiscount ? `<span class="discount">${product.discountPercentage}% OFF</span>` : ''}
+					<img src="${product.image}" alt="${product.name}">
+				</a>
             </div>
             <a href="product-details.html?productId=${product.id}"><h4>${product.name}</h4></a>
             <p>${product.description}</p>
@@ -62,6 +64,30 @@ function updateProducts() {
     setupQuickView();
     setupAddToCart();
 }
+// Function to filter and display discounted products
+function displayDiscountedProducts(products) {
+    const discountedProducts = products.filter(product => product.discountPercentage && product.discountPercentage > 0);
+    const swiperWrapper = document.querySelector('.hot-swiper');
+    if (swiperWrapper) {
+        swiperWrapper.innerHTML = '';
+        const productsHTML = discountedProducts
+            .map(product => createProductHTML(product))
+            .join('');
+        swiperWrapper.innerHTML = productsHTML;
+    }
+}
+function displayFirstSixProducts(products) {
+    const latestDiv = document.querySelector('.latest-deal .latest-products');
+    if (latestDiv) {
+        const firstSixProducts = products.slice(0, 6);
+        const productsHTML = firstSixProducts
+            .map(product => createProductHTML(product))
+            .join('');
+        latestDiv.innerHTML = productsHTML;
+    }
+}
+displayDiscountedProducts(products);
+displayFirstSixProducts(products);
 // handle QuickView button on card
 function setupQuickView() {
     document.querySelectorAll('.view-button').forEach((button) => {
@@ -255,5 +281,15 @@ const swiper3 = new Swiper(".swiper-4", {
         nextEl: "#next3",
         prevEl: "#prev3",
     },
+});
+const swiper4 = new Swiper(".swiper-5", {
+    slidesPerView: 1,
+    loop: true,
+    spaceBetween: 20,
+    autoplay: {
+        pauseOnMouseEnter: true,
+        delay: 3000,
+    },
+    speed: 1000,
 });
 //# sourceMappingURL=main.js.map
