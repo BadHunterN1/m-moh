@@ -144,7 +144,7 @@ function updateOrderSummary(totalPriceCents, cartQuantity) {
                 data-original-price-usd-cents="${totalPriceCents}"
                 autocomplete="off"
                 readonly
-                value="Your total price: ${convMoney(totalPriceCents)} ${getCurrencySymbol()}" />
+                value="" />
             <label for="Full_Price">Total Price</label>
         </div>
         <div style="opacity: 0;" class="form-input-material"> 
@@ -165,6 +165,7 @@ function updateOrderSummary(totalPriceCents, cartQuantity) {
             cartInHTML += `<p> <strong>Product Name:</strong>${matchingproduct.name} <br> <strong>Product Quantity:</strong> ${cartItem.quantity}, <br> </p>`;
         }
     });
+    document.getElementById('Full_Price').value = `Your total price: ${convMoney(totalPriceCents)} ${getCurrencySymbol()}`;
     document.querySelector("#order").value = cartInHTML;
     document.getElementById('contact_number').value = `You ordered ${cartQuantity} items`;
 }
